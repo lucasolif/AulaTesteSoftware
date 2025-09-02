@@ -6,13 +6,13 @@ public final class QuadraticEquationImpl implements QuadraticEquation{
 
 	final double a, b, c;
 	
-	public QuadraticEquationImpl(double a, double b, double c) throws InvalidParameterException {
+	public QuadraticEquationImpl(double a, double b, double c) {
 		
 		this.a = a;
 		this.b = b;
 		this.c = c;
 		
-		if(Double.compare(a, 0.0) == 0) {
+		if (Double.compare(a, 0.0) == 0) {
 			throw new InvalidParameterException("Invalid parameter value a:" +a);
 		}
 		
@@ -47,12 +47,22 @@ public final class QuadraticEquationImpl implements QuadraticEquation{
 
 	@Override
 	public double realRoots() {
-		return 0;
+	    double delta = discriminat();
+
+	    if (delta < 0) {
+	        return Double.NaN;
+	    } else if (delta == 0) {
+	        return -b / (2 * a); 
+	    } else {
+	        double r1 = (-b - Math.sqrt(delta)) / (2 * a);
+	        double r2 = (-b + Math.sqrt(delta)) / (2 * a);
+	        return Math.min(r1, r2); 
+	    }
 	}
 
 	@Override
 	public double valueFor(double x) {
-		return 0;
+		return a*x*x + b*x + c;
 	}
 
 }

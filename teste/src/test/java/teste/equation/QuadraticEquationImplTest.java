@@ -28,9 +28,7 @@ class QuadraticEquationImplTest {
 		//assert
 		Assertions.assertThrows(
 			InvalidParameterException.class, 
-			() -> {
-				new QuadraticEquationImpl(a,b,c);
-			}
+			() -> new QuadraticEquationImpl(a,b,c)	
 		);
 	}
 	
@@ -117,29 +115,61 @@ class QuadraticEquationImplTest {
 		Assertions.assertTrue(Double.compare(expected, obtained) == 0);
 	}
 	
+	@Test
 	void shouldReturnZeroRealRoots () {
 		
 		double a, b , c;
 		QuadraticEquation equation;
-		Integer expected, obtained;
-		
+		int expected, obtained;
 		
 		a = 1; b = 0; c = 1; expected = 0;
 		equation = new QuadraticEquationImpl(a, b, c);
 		obtained = equation.howManyRealRoots();
 		Assertions.assertEquals(expected, obtained);
 		
-		a = 1; b = 3; c = 1; expected = 1;
+		a = 1; b = 2; c = 1; expected = 1;
 		equation = new QuadraticEquationImpl(a, b, c);
 		obtained = equation.howManyRealRoots();
 		Assertions.assertEquals(expected, obtained);
 		
-		a = 1; b = 0; c = 1; expected = 2;
+		a = 1; b = 0; c = -1; expected = 2;
 		equation = new QuadraticEquationImpl(a, b, c);
 		obtained = equation.howManyRealRoots();
 		Assertions.assertEquals(expected, obtained);
 	}
 	
-	
+	@Test
+	void shouldHandleRealRootsCorrectly() {
+	    QuadraticEquation equation;
+	    double expected, obtained;
 
+	    //Nenhuma Raiz
+	    equation = new QuadraticEquationImpl(1, 0, 1);
+	    obtained = equation.realRoots();
+	    Assertions.assertTrue(Double.isNaN(obtained));
+
+	    //Uma Raiz
+	    equation = new QuadraticEquationImpl(1, -2, 1);
+	    expected = 1.0;
+	    obtained = equation.realRoots();
+	    Assertions.assertEquals(expected, obtained, 0.0001);
+
+	    // Duas Raizes
+	    equation = new QuadraticEquationImpl(1, -3, 2); 
+	    expected = 1.0;
+	    obtained = equation.realRoots();
+	    Assertions.assertEquals(expected, obtained, 0.0001);
+	}
+	
+	@Test
+	void shouldEvaluateQuadraticCorrectly() {
+
+        QuadraticEquation equation = new QuadraticEquationImpl(1, 0, -4);
+
+        Assertions.assertEquals(0, equation.valueFor(2), 1e-6, "Raiz positiva esperada em x=2");
+        Assertions.assertEquals(0, equation.valueFor(-2), 1e-6, "Raiz negativa esperada em x=-2");
+        Assertions.assertEquals(-4, equation.valueFor(0), 1e-6, "Em x=0 deve ser -4");
+        Assertions.assertEquals(5, equation.valueFor(3), 1e-6, "Em x=3 deve ser 5");
+        Assertions.assertEquals(5, equation.valueFor(-3), 1e-6, "Em x=-3 deve ser 5");
+	}
 }
